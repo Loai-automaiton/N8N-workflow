@@ -301,7 +301,7 @@
       "parameters": {
         "content": "## Subworkflow",
         "height": 751,
-        "width": 2547,
+        "width": 2755,
         "color": 6
       },
       "id": "760bc49c-9e70-401a-a7a4-6462d65a8452",
@@ -609,8 +609,8 @@
     {
       "parameters": {
         "content": "## Main workflow loop",
-        "height": 434.88564057365943,
-        "width": 886.4410237965205,
+        "height": 435,
+        "width": 1430,
         "color": 7
       },
       "id": "3941291f-2979-4449-ab82-690d8c9f9d2e",
@@ -835,7 +835,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// --- Sanitization Code ---\nconst wf = JSON.parse(JSON.stringify($json));\n\nwf.nodes.forEach(node => {\n  if (node.credentials) {\n    node.credentials = { \"REDACTED\": \"***\" };\n  }\n});\n\ndelete wf.auth;\ndelete wf.API_KEY;\ndelete wf.token;\n\nreturn { json: wf };          // this is the file content"
+        "jsCode": "// --- Sanitization Code ---\nlet wf;\n\n// If workflow is already an object with .nodes\nif ($json.nodes) {\n  wf = JSON.parse(JSON.stringify($json));\n}\n// Else if it's wrapped inside n8n_data_stringy\nelse if ($json.n8n_data_stringy) {\n  wf = JSON.parse($json.n8n_data_stringy);\n}\n// Fallback case\nelse {\n  wf = {};\n}\n\n// Only loop if nodes exist\nif (Array.isArray(wf.nodes)) {\n  wf.nodes.forEach(node => {\n    if (node.credentials) {\n      node.credentials = { \"REDACTED\": \"***\" };\n    }\n  });\n}\n\ndelete wf.auth;\ndelete wf.API_KEY;\ndelete wf.token;\n\nreturn { json: wf };"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -862,6 +862,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2025-09-12T11:48:49.000Z",
-  "versionId": "d1885d80-f552-4924-b08c-918e907d6e7a"
+  "updatedAt": "2025-09-12T12:30:53.000Z",
+  "versionId": "18140ff3-45d8-4943-b226-9cb45224f330"
 }
