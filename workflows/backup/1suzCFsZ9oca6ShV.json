@@ -148,7 +148,7 @@
         [],
         [
           {
-            "node": "Execute Workflow",
+            "node": "Code",
             "type": "main",
             "index": 0
           }
@@ -254,6 +254,17 @@
           }
         ]
       ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Execute Workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "createdAt": "2025-09-12T09:24:04.048Z",
@@ -300,7 +311,7 @@
       "name": "n8n",
       "type": "n8n-nodes-base.n8n",
       "position": [
-        1168,
+        1104,
         192
       ],
       "typeVersion": 1,
@@ -544,7 +555,7 @@
       "name": "Loop Over Items",
       "type": "n8n-nodes-base.splitInBatches",
       "position": [
-        1376,
+        1584,
         208
       ],
       "typeVersion": 3
@@ -703,8 +714,8 @@
       "name": "Execute Workflow",
       "type": "n8n-nodes-base.executeWorkflow",
       "position": [
-        1584,
-        192
+        2032,
+        224
       ],
       "typeVersion": 1.2
     },
@@ -796,6 +807,19 @@
         752
       ],
       "typeVersion": 3.2
+    },
+    {
+      "parameters": {
+        "jsCode": "// Take workflow JSON and redact sensitive fields\nconst wf = JSON.parse(JSON.stringify($json));\n\n// Remove/replace credentials\nwf.nodes.forEach(node => {\n  if (node.credentials) {\n    node.credentials = { \"REDACTED\": \"***\" };\n  }\n});\n\n// Also remove common sensitive properties\ndelete wf.auth;\ndelete wf.API_KEY;\ndelete wf.token;\n\nreturn [{ json: wf }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1824,
+        224
+      ],
+      "id": "d9bdd653-bd65-40e0-910e-c31ed757fc36",
+      "name": "Code"
     }
   ],
   "pinData": {},
@@ -812,6 +836,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2025-09-12T10:53:09.000Z",
-  "versionId": "ec7bc80e-ac5c-4e98-b05c-a56022b631ea"
+  "updatedAt": "2025-09-12T11:11:00.000Z",
+  "versionId": "a4a63e26-9068-4a45-9c7d-2e216aa89d81"
 }
