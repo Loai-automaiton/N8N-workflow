@@ -1046,6 +1046,7 @@
       }
     ]
   },
+  "sanitized": true,
   "settings": {
     "executionOrder": "v1"
   },
