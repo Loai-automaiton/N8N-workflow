@@ -523,9 +523,11 @@
       ],
       "typeVersion": 1,
       "webhookId": "f4f477e1-37b7-4c2e-bbce-a14595513e47",
+      "alwaysOutputData": false,
       "credentials": {
         "REDACTED": "***"
-      }
+      },
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -862,6 +864,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2025-09-12T12:30:53.000Z",
-  "versionId": "18140ff3-45d8-4943-b226-9cb45224f330"
+  "updatedAt": "2025-09-12T13:16:31.000Z",
+  "versionId": "f372241b-d9d5-40c8-a72e-035a7ffa17a5"
 }
