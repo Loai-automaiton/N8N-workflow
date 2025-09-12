@@ -158,10 +158,7 @@
         }
       },
       "credentials": {
-        "googleDriveOAuth2Api": {
-          "id": "j96VEX9ehSl3feCo",
-          "name": "Google Drive account"
-        }
+        "REDACTED": "***"
       },
       "typeVersion": 1
     },
@@ -184,10 +181,7 @@
         "authentication": "oAuth2"
       },
       "credentials": {
-        "googleDriveOAuth2Api": {
-          "id": "j96VEX9ehSl3feCo",
-          "name": "Google Drive account"
-        }
+        "REDACTED": "***"
       },
       "retryOnFail": true,
       "typeVersion": 1,
@@ -286,10 +280,7 @@
         "operation": "transcribe"
       },
       "credentials": {
-        "openAiApi": {
-          "id": "XJdxgMSXFgwReSsh",
-          "name": "n8n key"
-        }
+        "REDACTED": "***"
       },
       "notesInFlow": true,
       "retryOnFail": true,
@@ -340,10 +331,7 @@
         }
       },
       "credentials": {
-        "openAiApi": {
-          "id": "XJdxgMSXFgwReSsh",
-          "name": "n8n key"
-        }
+        "REDACTED": "***"
       },
       "notesInFlow": true,
       "retryOnFail": true,
@@ -418,10 +406,7 @@
         "genericAuthType": "httpHeaderAuth"
       },
       "credentials": {
-        "httpHeaderAuth": {
-          "id": "WNjAx7UqrEZ1JDrR",
-          "name": "VituManco"
-        }
+        "REDACTED": "***"
       },
       "notesInFlow": true,
       "typeVersion": 4.2
@@ -466,10 +451,7 @@
         "genericAuthType": "httpHeaderAuth"
       },
       "credentials": {
-        "httpHeaderAuth": {
-          "id": "g8JfBXF3l9mZLtGZ",
-          "name": "Header Auth account"
-        }
+        "REDACTED": "***"
       },
       "notesInFlow": true,
       "typeVersion": 4.2
@@ -528,10 +510,7 @@
         "genericAuthType": "httpHeaderAuth"
       },
       "credentials": {
-        "httpHeaderAuth": {
-          "id": "g8JfBXF3l9mZLtGZ",
-          "name": "Header Auth account"
-        }
+        "REDACTED": "***"
       },
       "notesInFlow": true,
       "typeVersion": 4.2
