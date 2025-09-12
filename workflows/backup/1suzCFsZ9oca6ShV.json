@@ -305,10 +305,7 @@
       ],
       "typeVersion": 1,
       "credentials": {
-        "n8nApi": {
-          "id": "SK1y6FWA2lwbvHRp",
-          "name": "n8n account"
-        }
+        "REDACTED": "***"
       }
     },
     {
@@ -405,7 +402,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const orderJsonKeys = (jsonObj) => {\n  const ordered = {};\n  Object.keys(jsonObj).sort().forEach(key => {\n    ordered[key] = jsonObj[key];\n  });\n  return ordered;\n}\n\n// Check if file returned with content\nif (Object.keys($input.all()[0].json).includes(\"content\")) {\n  // Decode base64 content and parse JSON\n  const origWorkflow = JSON.parse(Buffer.from($input.all()[0].json.content, 'base64').toString());\n  const n8nWorkflow = $input.all()[1].json;\n  \n  // Order JSON objects\n  const orderedOriginal = orderJsonKeys(origWorkflow);\n  const orderedActual = orderJsonKeys(n8nWorkflow);\n\n  // Determine difference\n  if (JSON.stringify(orderedOriginal) === JSON.stringify(orderedActual)) {\n    $input.all()[0].json.github_status = \"same\";\n  } else {\n    $input.all()[0].json.github_status = \"different\";\n    $input.all()[0].json.n8n_data_stringy = JSON.stringify(orderedActual, null, 2);\n  }\n  $input.all()[0].json.content_decoded = orderedOriginal;\n// No file returned / new workflow\n} else if (Object.keys($input.all()[0].json).includes(\"data\")) {\n  const origWorkflow = JSON.parse($input.all()[0].json.data);\n  const n8nWorkflow = $input.all()[1].json;\n  \n  // Order JSON objects\n  const orderedOriginal = orderJsonKeys(origWorkflow);\n  const orderedActual = orderJsonKeys(n8nWorkflow);\n\n  // Determine difference\n  if (JSON.stringify(orderedOriginal) === JSON.stringify(orderedActual)) {\n    $input.all()[0].json.github_status = \"same\";\n  } else {\n    $input.all()[0].json.github_status = \"different\";\n    $input.all()[0].json.n8n_data_stringy = JSON.stringify(orderedActual, null, 2);\n  }\n  $input.all()[0].json.content_decoded = orderedOriginal;\n\n} else {\n  // Order JSON object\n  const n8nWorkflow = $input.all()[1].json;\n  const orderedActual = orderJsonKeys(n8nWorkflow);\n  \n  // Proper formatting\n  $input.all()[0].json.github_status = \"new\";\n  $input.all()[0].json.n8n_data_stringy = JSON.stringify(orderedActual, null, 2);\n}\n\n// Return items\nreturn $input.all();"
+        "jsCode": "const orderJsonKeys = (jsonObj) => {\n  const ordered = {};\n  Object.keys(jsonObj).sort().forEach(key => {\n    ordered[key] = jsonObj[key];\n  });\n  return ordered;\n};\n\n// 🔹 Helper: redact credentials\nconst redactWorkflow = (workflow) => {\n  // Clone so we don’t mutate original\n  const wfCopy = JSON.parse(JSON.stringify(workflow));\n\n  wfCopy.nodes.forEach(node => {\n    if (node.credentials) {\n      node.credentials = { \"REDACTED\": \"***\" };  // remove or mask credentials\n    }\n  });\n\n  return wfCopy;\n};\n\n// ========== Your existing logic ===========\n\n// Check if file returned with content\nif (Object.keys($input.all()[0].json).includes(\"content\")) {\n  const origWorkflow = JSON.parse(Buffer.from($input.all()[0].json.content, 'base64').toString());\n  const n8nWorkflow = redactWorkflow($input.all()[1].json);\n\n  const orderedOriginal = orderJsonKeys(origWorkflow);\n  const orderedActual = orderJsonKeys(n8nWorkflow);\n\n  if (JSON.stringify(orderedOriginal) === JSON.stringify(orderedActual)) {\n    $input.all()[0].json.github_status = \"same\";\n  } else {\n    $input.all()[0].json.github_status = \"different\";\n    $input.all()[0].json.n8n_data_stringy = JSON.stringify(orderedActual, null, 2);\n  }\n  $input.all()[0].json.content_decoded = orderedOriginal;\n\n} else if (Object.keys($input.all()[0].json).includes(\"data\")) {\n  const origWorkflow = JSON.parse($input.all()[0].json.data);\n  const n8nWorkflow = redactWorkflow($input.all()[1].json);\n\n  const orderedOriginal = orderJsonKeys(origWorkflow);\n  const orderedActual = orderJsonKeys(n8nWorkflow);\n\n  if (JSON.stringify(orderedOriginal) === JSON.stringify(orderedActual)) {\n    $input.all()[0].json.github_status = \"same\";\n  } else {\n    $input.all()[0].json.github_status = \"different\";\n    $input.all()[0].json.n8n_data_stringy = JSON.stringify(orderedActual, null, 2);\n  }\n  $input.all()[0].json.content_decoded = orderedOriginal;\n\n} else {\n  const n8nWorkflow = redactWorkflow($input.all()[1].json);\n  const orderedActual = orderJsonKeys(n8nWorkflow);\n\n  $input.all()[0].json.github_status = \"new\";\n  $input.all()[0].json.n8n_data_stringy = JSON.stringify(orderedActual, null, 2);\n}\n\nreturn $input.all();"
       },
       "id": "72ec5783-2d78-4a8d-89a5-33794a850148",
       "name": "isDiffOrNew",
@@ -505,15 +502,11 @@
       "typeVersion": 1,
       "webhookId": "f4f477e1-37b7-4c2e-bbce-a14595513e47",
       "credentials": {
-        "githubApi": {
-          "id": "oFMJauOIHs7Yr36K",
-          "name": "GitHub account 4"
-        }
+        "REDACTED": "***"
       }
     },
     {
       "parameters": {
-        "authentication": "oAuth2",
         "resource": "file",
         "operation": "edit",
         "owner": {
@@ -540,10 +533,7 @@
       "typeVersion": 1,
       "webhookId": "2466cbe6-ec62-470b-92d8-e36a233b56eb",
       "credentials": {
-        "githubOAuth2Api": {
-          "id": "THNQoeSYDjKKnGGr",
-          "name": "GitHub account"
-        }
+        "REDACTED": "***"
       }
     },
     {
@@ -639,10 +629,7 @@
       "alwaysOutputData": true,
       "webhookId": "a48fd376-640d-442b-be68-d119b5a4a1d9",
       "credentials": {
-        "githubApi": {
-          "id": "oFMJauOIHs7Yr36K",
-          "name": "GitHub account 4"
-        }
+        "REDACTED": "***"
       },
       "continueOnFail": true
     },
@@ -825,6 +812,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2025-09-12T09:40:13.000Z",
-  "versionId": "5b099a42-2f1a-4433-9c2f-1a9c195c1ba0"
+  "updatedAt": "2025-09-12T10:50:20.000Z",
+  "versionId": "497b59b5-9326-4955-8e20-f5c6091c42fc"
 }
