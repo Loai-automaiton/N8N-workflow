@@ -67,7 +67,7 @@
       "main": [
         [
           {
-            "node": "Create new file",
+            "node": "Code1",
             "type": "main",
             "index": 0
           }
@@ -265,6 +265,17 @@
           }
         ]
       ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Create new file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "createdAt": "2025-09-12T09:24:04.048Z",
@@ -337,7 +348,7 @@
       "name": "Return",
       "type": "n8n-nodes-base.set",
       "position": [
-        2816,
+        3024,
         688
       ],
       "typeVersion": 3.3
@@ -413,7 +424,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const orderJsonKeys = (jsonObj) => {\n  const ordered = {};\n  Object.keys(jsonObj).sort().forEach(key => {\n    ordered[key] = jsonObj[key];\n  });\n  return ordered;\n};\n\n// Helper to redact credentials/secrets from a workflow\nconst redactWorkflow = (workflow) => {\n  const wfCopy = JSON.parse(JSON.stringify(workflow));\n\n  wfCopy.nodes.forEach(node => {\n    if (node.credentials) {\n      // Instead of saving credentials, mask them\n      node.credentials = { \"REDACTED\": \"***\" };\n    }\n  });\n\n  return wfCopy;\n};\n\n// ------------ main logic ------------\n\n// if workflow file exists in repo\nif (Object.keys($input.all()[0].json).includes(\"content\")) {\n  const origWorkflow = JSON.parse(Buffer.from($input.all()[0].json.content, 'base64').toString());\n  const n8nWorkflow = redactWorkflow($input.all()[1].json);\n\n  const orderedOriginal = orderJsonKeys(origWorkflow);\n  const orderedActual = orderJsonKeys(n8nWorkflow);\n\n  if (JSON.stringify(orderedOriginal) === JSON.stringify(orderedActual)) {\n    $input.all()[0].json.github_status = \"same\";\n  } else {\n    $input.all()[0].json.github_status = \"different\";\n    $input.all()[0].json.n8n_data_stringy = JSON.stringify(orderedActual, null, 2);\n  }\n  $input.all()[0].json.content_decoded = orderedOriginal;\n\n// if GitHub returned `data` instead of `content`\n} else if (Object.keys($input.all()[0].json).includes(\"data\")) {\n  const origWorkflow = JSON.parse($input.all()[0].json.data);\n  const n8nWorkflow = redactWorkflow($input.all()[1].json);\n\n  const orderedOriginal = orderJsonKeys(origWorkflow);\n  const orderedActual = orderJsonKeys(n8nWorkflow);\n\n  if (JSON.stringify(orderedOriginal) === JSON.stringify(orderedActual)) {\n    $input.all()[0].json.github_status = \"same\";\n  } else {\n    $input.all()[0].json.github_status = \"different\";\n    $input.all()[0].json.n8n_data_stringy = JSON.stringify(orderedActual, null, 2);\n  }\n  $input.all()[0].json.content_decoded = orderedOriginal;\n\n// new workflow (not in repo yet)\n} else {\n  const n8nWorkflow = redactWorkflow($input.all()[1].json);\n  const orderedActual = orderJsonKeys(n8nWorkflow);\n\n  $input.all()[0].json.github_status = \"new\";\n  $input.all()[0].json.n8n_data_stringy = JSON.stringify(orderedActual, null, 2);\n}\n\nreturn $input.all();"
+        "jsCode": "const orderJsonKeys = (jsonObj) => {\n  const ordered = {};\n  Object.keys(jsonObj).sort().forEach(key => {\n    ordered[key] = jsonObj[key];\n  });\n  return ordered;\n};\n\n// Helper to redact credentials/secrets from a workflow\nconst redactWorkflow = (workflow) => {\n  const wfCopy = JSON.parse(JSON.stringify(workflow));\n\n  // Only sanitize if workflow actually has nodes\n  if (Array.isArray(wfCopy.nodes)) {\n    wfCopy.nodes.forEach(node => {\n      if (node.credentials) {\n        node.credentials = { \"REDACTED\": \"***\" };\n      }\n    });\n  }\n\n  return wfCopy;\n};\n\n// ------------ main logic ------------\n\n// if workflow file exists in repo\nif (Object.keys($input.all()[0].json).includes(\"content\")) {\n  const origWorkflow = JSON.parse(Buffer.from($input.all()[0].json.content, 'base64').toString());\n  const n8nWorkflow = redactWorkflow($input.all()[1].json);\n\n  const orderedOriginal = orderJsonKeys(origWorkflow);\n  const orderedActual = orderJsonKeys(n8nWorkflow);\n\n  if (JSON.stringify(orderedOriginal) === JSON.stringify(orderedActual)) {\n    $input.all()[0].json.github_status = \"same\";\n  } else {\n    $input.all()[0].json.github_status = \"different\";\n    $input.all()[0].json.n8n_data_stringy = JSON.stringify(orderedActual, null, 2);\n  }\n  $input.all()[0].json.content_decoded = orderedOriginal;\n\n// if GitHub returned `data` instead of `content`\n} else if (Object.keys($input.all()[0].json).includes(\"data\")) {\n  const origWorkflow = JSON.parse($input.all()[0].json.data);\n  const n8nWorkflow = redactWorkflow($input.all()[1].json);\n\n  const orderedOriginal = orderJsonKeys(origWorkflow);\n  const orderedActual = orderJsonKeys(n8nWorkflow);\n\n  if (JSON.stringify(orderedOriginal) === JSON.stringify(orderedActual)) {\n    $input.all()[0].json.github_status = \"same\";\n  } else {\n    $input.all()[0].json.github_status = \"different\";\n    $input.all()[0].json.n8n_data_stringy = JSON.stringify(orderedActual, null, 2);\n  }\n  $input.all()[0].json.content_decoded = orderedOriginal;\n\n// new workflow (not in repo yet)\n} else {\n  const n8nWorkflow = redactWorkflow($input.all()[1].json);\n  const orderedActual = orderJsonKeys(n8nWorkflow);\n\n  $input.all()[0].json.github_status = \"new\";\n  $input.all()[0].json.n8n_data_stringy = JSON.stringify(orderedActual, null, 2);\n}\n\nreturn $input.all();"
       },
       "id": "72ec5783-2d78-4a8d-89a5-33794a850148",
       "name": "isDiffOrNew",
@@ -507,7 +518,7 @@
       "name": "Create new file",
       "type": "n8n-nodes-base.github",
       "position": [
-        2576,
+        2784,
         1008
       ],
       "typeVersion": 1,
@@ -821,6 +832,19 @@
       ],
       "id": "d9bdd653-bd65-40e0-910e-c31ed757fc36",
       "name": "Code"
+    },
+    {
+      "parameters": {
+        "jsCode": "// --- Sanitization Code ---\nconst wf = JSON.parse(JSON.stringify($json));\n\nwf.nodes.forEach(node => {\n  if (node.credentials) {\n    node.credentials = { \"REDACTED\": \"***\" };\n  }\n});\n\ndelete wf.auth;\ndelete wf.API_KEY;\ndelete wf.token;\n\nreturn { json: wf };          // this is the file content"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2560,
+        1008
+      ],
+      "id": "f43386fd-dbe7-42db-aa91-d85bc5b22160",
+      "name": "Code1"
     }
   ],
   "pinData": {},
@@ -838,6 +862,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2025-09-12T11:33:54.000Z",
-  "versionId": "8bec7346-ed66-4423-9841-a67789e4b43c"
+  "updatedAt": "2025-09-12T11:48:49.000Z",
+  "versionId": "d1885d80-f552-4924-b08c-918e907d6e7a"
 }
