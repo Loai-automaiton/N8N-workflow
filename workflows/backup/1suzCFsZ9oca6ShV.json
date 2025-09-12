@@ -500,7 +500,7 @@
           "value": "={{ $('Globals').item.json.repo.name }}"
         },
         "filePath": "={{ $('Globals').item.json.repo.path }}{{$('Execute Workflow Trigger').first().json.id}}.json",
-        "fileContent": "={{$('isDiffOrNew').item.json[\"n8n_data_stringy\"]}}",
+        "fileContent": "={{ JSON.stringify($json, null, 2) }}",
         "commitMessage": "={{$('Execute Workflow Trigger').first().json.name}} ({{$json.github_status}})"
       },
       "id": "45edc3c2-6ac0-441f-8fee-f79479d35ee4",
@@ -810,7 +810,8 @@
     },
     {
       "parameters": {
-        "jsCode": "// Take workflow JSON and redact sensitive fields\nconst wf = JSON.parse(JSON.stringify($json));\n\n// Remove/replace credentials\nwf.nodes.forEach(node => {\n  if (node.credentials) {\n    node.credentials = { \"REDACTED\": \"***\" };\n  }\n});\n\n// Also remove common sensitive properties\ndelete wf.auth;\ndelete wf.API_KEY;\ndelete wf.token;\n\nreturn [{ json: wf }];"
+        "mode": "runOnceForEachItem",
+        "jsCode": "// Get each workflow item\nconst wf = JSON.parse(JSON.stringify($json));\n\n// Remove or mask credentials on all nodes\nwf.nodes.forEach(node => {\n  if (node.credentials) {\n    node.credentials = { \"REDACTED\": \"***\" };\n  }\n});\n\n// Remove other typical secret fields\ndelete wf.auth;\ndelete wf.API_KEY;\ndelete wf.token;\n\n// Return cleaned workflow\nreturn {\n  json: {\n    ...wf,\n    sanitized: true\n  }\n};"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -837,6 +838,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2025-09-12T11:11:00.000Z",
-  "versionId": "a4a63e26-9068-4a45-9c7d-2e216aa89d81"
+  "updatedAt": "2025-09-12T11:33:54.000Z",
+  "versionId": "8bec7346-ed66-4423-9841-a67789e4b43c"
 }
